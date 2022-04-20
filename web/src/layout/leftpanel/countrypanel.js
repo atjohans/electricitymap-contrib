@@ -169,6 +169,13 @@ const EstimatedDataInfoBox = styled.p`
   font-size: .75rem;
   margin: 1rem 0;
 `;
+const EstimatedDataInfoBoxNoText = styled.p`
+  border-radius: 6px;
+  padding: 6px;
+  font-size: .75rem;
+  margin: 1rem 0;
+  visibility:hidden; 
+`;
 
 const EstimatedDataInfo = ({ text }) => (
   <React.Fragment>
@@ -180,6 +187,19 @@ const EstimatedDataInfo = ({ text }) => (
     <hr />
   </React.Fragment>
 );
+
+//used as a buffer to prevent the div size from changing (cause of flickering on graph hover)
+const EstimatedDataInfoBlank = ({ text }) => (
+  <React.Fragment>
+    <EstimatedDataInfoBoxNoText
+      dangerouslySetInnerHTML={{
+        __html: text,
+      }}
+    />
+    <hr />
+  </React.Fragment>
+);
+
 
 const CountryHeader = ({ parentPage, zoneId, data, isMobile }) => {
   const { disclaimer, estimationMethod, stateDatetime, datetime } = data;
@@ -343,7 +363,7 @@ const CountryPanel = ({ electricityMixMode, isMobile, tableDisplayEmissions, zon
             <CountryTable />
 
             <hr />
-            {isDataEstimated && <EstimatedDataInfo text={__('country-panel.dataIsEstimated')} />}
+            {isDataEstimated ? <EstimatedDataInfo text={__('country-panel.dataIsEstimated')} /> : <EstimatedDataInfoBlank text={__('country-panel.dataIsEstimated')} />  }
             <div className="country-history">
               <CountryHistoryTitle>
                 {__(tableDisplayEmissions ? 'country-history.emissions24h' : 'country-history.carbonintensity24h')}
